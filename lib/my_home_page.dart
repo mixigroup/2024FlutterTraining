@@ -13,13 +13,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  // state 準備！
+  String text = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +25,27 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // Center で真ん中寄せ
-      body: Center(
-        // Column は [] の中身を縦に並べてくれる widget
-        // Row で横になるよ
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'なんか打ってね',
+              ),
+              // 打った文字が value に入ってくる
+              onChanged: (value) {
+                // state に入れて再描画！
+                setState(() {
+                  text = value;
+                });
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      // 右下のプラスボタン（Floating Action Button と言います）
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          ),
+          // 打った文字を表示
+          Text(text),
+        ],
       ),
     );
   }
