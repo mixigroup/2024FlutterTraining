@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 // こちらが　MyHomePage
 // StatefulWidget に関しても後で説明するよ！！！！！
@@ -23,77 +24,24 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       // Center で真ん中寄せ
-      body: const Center(
-        // Column は [] の中身を縦に並べてくれる widget
-        // Row で横になるよ
-        child: Column(
-          // 端っこから端っこまで隙間を含めて均等に配置
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Row(
-              // 端っこからスタートして端っこまで均等に配置
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-              ],
-            ),
-            Row(
-              // 端っこから端っこまで均等に配置
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-              ],
-            ),
-            Row(
-              // 端っこから端っこまで均等に配置
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ColoredBox(color: Colors.deepPurple),
-                ),
-              ],
-            ),
-          ],
+      body: Center(
+        child: GridView.count(
+          // 横に並べる数
+          crossAxisCount: 3,
+          // 縦の間隔
+          mainAxisSpacing: 50,
+          // 横の感覚
+          crossAxisSpacing: 50,
+          children: List.generate(
+            // 並べる個数
+            9,
+            // 並べる要素
+            (index) {
+              return const ColoredBox(
+                color: Colors.deepPurple,
+              );
+            },
+          ),
         ),
       ),
     );
