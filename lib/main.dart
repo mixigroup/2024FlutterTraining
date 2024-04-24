@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_2024/my_home_page.dart';
 
 // 中枢！main.dart の main() が最初に呼ばれる
 void main() {
@@ -30,64 +31,8 @@ class MyApp extends StatelessWidget {
       ),
       // 最初に表示させるページをは下の MyHomePage
       // 引数として title 渡してる（無くてもいいよ）
+      // 別ファイルに切り出した MyHomePage を import してあげる
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-// こちらが　MyHomePage
-// StatefulWidget に関しても後で説明するよ！！！！！
-class MyHomePage extends StatefulWidget {
-  // title を受け取ってるね👀
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Scaffold は土台みたいな感じ（白紙みたいな）
-    return Scaffold(
-      // AppBar は上のヘッダー
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      // Center で真ん中寄せ
-      body: Center(
-        // Column は [] の中身を縦に並べてくれる widget
-        // Row で横になるよ
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      // 右下のプラスボタン（Floating Action Button と言います）
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
