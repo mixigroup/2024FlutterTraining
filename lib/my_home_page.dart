@@ -14,6 +14,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String body = '';
+
   // リポジトリ取得するメソッド
   // async キーワードは関数が非同期であることを示す
   // async を付けた関数は内部で await を使用することができる＆常に Future オブジェクトを返す
@@ -37,9 +39,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // ステータスコードを確認してみる
     // 200OK なら成功！
     debugPrint('Response status: ${response.statusCode}');
-    // ボディを確認してみる
-    // さっき curl で叩いた時と一緒のものが返ってきてるはず
-    debugPrint('Response body: ${response.body}');
+    // ボディを表示してみる
+    setState(() {
+      body = response.body;
+    });
   }
 
   @override
@@ -51,18 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // Center で真ん中寄せ
-      body: const Center(
-        // Column は [] の中身を縦に並べてくれる widget
-        // Row で横になるよ
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
-        ),
+      // SingleChildScrollView を使ってスクロールできるようにしてる
+      body: SingleChildScrollView(
+        child: Text(body),
       ),
       // 右下のプラスボタン（Floating Action Button と言います）
       floatingActionButton: FloatingActionButton(
