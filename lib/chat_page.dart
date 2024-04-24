@@ -63,9 +63,10 @@ class _ChatPageState extends State<ChatPage> {
     final response = await http.post(
       url,
       body: json.encode({
-        'messages': [
-          {'role': 'user', 'content': text}
-        ]
+        'messages': prefs
+            .getStringList(key)
+            ?.map((message) => json.decode(message))
+            .toList(),
       }),
       headers: {'Content-Type': 'application/json', 'api-key': apiKey},
     );
