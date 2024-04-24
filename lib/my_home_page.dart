@@ -13,14 +13,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Scaffold は土台みたいな感じ（白紙みたいな）
@@ -31,27 +23,78 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       // Center で真ん中寄せ
-      body: Center(
+      body: const Center(
         // Column は [] の中身を縦に並べてくれる widget
         // Row で横になるよ
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // 端っこから端っこまで隙間を含めて均等に配置
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Row(
+              // 端っこからスタートして端っこまで均等に配置
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Row(
+              // 端っこから端っこまで均等に配置
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+              ],
+            ),
+            Row(
+              // 端っこから端っこまで均等に配置
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ColoredBox(color: Colors.deepPurple),
+                ),
+              ],
             ),
           ],
         ),
-      ),
-      // 右下のプラスボタン（Floating Action Button と言います）
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
