@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,9 +38,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // },
       // ```
     );
+
     // ステータスコードを確認してみる
     // 200OK なら成功！
     debugPrint('Response status: ${response.statusCode}');
+
+    // json から dart で扱える（Map<String, dynamic> のリスト）に変換（decode）
+    final List list = json.decode(response.body);
+    // こういう取得方法になるので typo したりネストしたりが大変！🥺
+    debugPrint(list[0]['name']);
+
     // ボディを表示してみる
     setState(() {
       body = response.body;
