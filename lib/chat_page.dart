@@ -15,8 +15,15 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   String _text = '';
+  // ローディングの表示・非表示を切り替える bool の state を追加
+  bool isLoading = false;
 
   Future<void> postChat(String text) async {
+    // ローディング開始！
+    setState(() {
+      isLoading = true;
+    });
+
     // dart-define コマンドから環境変数を取得
     // Uri.https で接続するときに接頭の http は不要なので注意⚠️
     const apiUrl = String.fromEnvironment('API_URL');
@@ -53,6 +60,7 @@ class _ChatPageState extends State<ChatPage> {
     // ▲ response をみながら返信を state に渡す
     setState(() {
       _text = answer.choices.first.message.content;
+      isLoading = false;
     });
   }
 
@@ -90,9 +98,18 @@ class _ChatPageState extends State<ChatPage> {
       ),
       // Center で真ん中寄せ
       body: Center(
-        child: Text(
-          _text,
-          style: Theme.of(context).textTheme.headlineMedium,
+        child: Column(
+          children: [
+            Text(
+              _text,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.orange,
+                  )
+                : const SizedBox.shrink()
+          ],
         ),
       ),
       // 右下のプラスボタン（Floating Action Button と言います）
