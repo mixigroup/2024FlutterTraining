@@ -28,16 +28,28 @@ class _MyHomePageState extends State<MyHomePage> {
       // ListView を作ってくれるビルダー
       body: ListView.builder(
         // 上で作った list の長さ分リストを作るよ！
-        itemCount: list.length,
+        // タイトル分を含めるために +1 してる
+        itemCount: list.length + 1,
         // 今回は使わないので BuildContext は省略
         // index に番目が入る
         itemBuilder: (_, index) {
+          // index が 0 のときはタイトルを表示
+          if (index == 0) {
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                '久野のすきなものリスト〜！',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            );
+          }
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               // list の index 番目のテキストを表示
               child: Text(
-                list[index],
+                // index の0番目はタイトルなので -1 してる
+                list[index - 1],
                 style: const TextStyle(
                   fontSize: 24,
                 ),
