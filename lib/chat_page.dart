@@ -82,46 +82,77 @@ class _ChatPageState extends State<ChatPage> {
     // デバッグ用
     debugPrint(prefs.getStringList(key).toString());
 
-    final response = await http.post(
-      url,
-      body: json.encode({
-        'messages': prefs
-            .getStringList(key)
-            ?.map((message) => json.decode(message))
-            .toList(),
-      }),
-      headers: {'Content-Type': 'application/json', 'api-key': apiKey},
-    );
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'messages': prefs
+              .getStringList(key)
+              ?.map((message) => json.decode(message))
+              .toList(),
+        }),
+        headers: {'Content-Type': 'application/json', 'api-key': apiKey},
+      ).timeout(
+          const Duration(seconds: 30)); // 30秒経っても返答なかったら TimeoutException を投げる
 
-    // ステータスコード確認！
-    debugPrint(response.statusCode.toString());
-    // body をそのまま出力すると文字化けしてしまう
-    // debugPrint(response.body);
-    // 文字化けをなくすために utf8 に decode してから json.decode する！
-    final bdoy = json.decode(utf8.decode(response.bodyBytes));
-    // model に変換！
-    final answer = Answer.fromJson(bdoy);
+      // ステータスコード確認！
+      debugPrint(response.statusCode.toString());
+      // body をそのまま出力すると文字化けしてしまう
+      // debugPrint(response.body);
+      // 文字化けをなくすために utf8 に decode してから json.decode する！
+      final bdoy = json.decode(utf8.decode(response.bodyBytes));
+      // model に変換！
+      final answer = Answer.fromJson(bdoy);
 
-    final Message aiMessage =
-        Message('assistant', answer.choices.first.message.content);
-    // 今までのメッセージに今回のメッセージを追加
-    prefs.setStringList(
-      key,
-      [
-        ...prefs.getStringList(key) ?? [],
-        jsonEncode(aiMessage.toJson()),
-      ],
-    );
+      final Message aiMessage =
+          Message('assistant', answer.choices.first.message.content);
+      // 今までのメッセージに今回のメッセージを追加
+      prefs.setStringList(
+        key,
+        [
+          ...prefs.getStringList(key) ?? [],
+          jsonEncode(aiMessage.toJson()),
+        ],
+      );
 
-    // ▲ response をみながら返信を state に渡す
-    setState(() {
-      stateMessage = [
-        ...stateMessage,
-        myMessage,
-        Message('assistant', answer.choices.first.message.content),
-      ];
-      isLoading = false;
-    });
+      // ▲ response をみながら返信を state に渡す
+      setState(() {
+        stateMessage = [
+          ...stateMessage,
+          myMessage,
+          Message('assistant', answer.choices.first.message.content),
+        ];
+        isLoading = false;
+      });
+    } catch (e) {
+      // エラーになったらローディングは一旦止める
+      setState(() {
+        isLoading = false;
+      });
+
+      debugPrint("エラー: $e");
+
+      // await 内で context 使う時は mounted を使ってウィジェットが破棄されていないかを確認する
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: const Text('エラー'),
+              content: const Text('しばらく時間を置いてからお試しください'),
+              actions: [
+                TextButton(
+                  child: const Text('はい'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          },
+        );
+      }
+    }
   }
 
   Future<void> openPostPage() async {
