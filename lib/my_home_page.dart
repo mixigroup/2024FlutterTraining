@@ -37,12 +37,53 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Row で横に並べる
+            const Row(
+              children: [
+                // SizedBox で大きさ（論理ピクセル）を決めてあげる
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  // ColoredBox で色を塗ってあげる
+                  // 色も用意してくれてる🎨
+                  child: ColoredBox(
+                    color: Colors.pink,
+                  ),
+                  // 自分で色指定もできる（丸動かすと自動で RGB 挿入してくれる🥺）
+                  // ```
+                  // child: ColoredBox(color: Color.fromARGB(255, 85, 170, 116)),
+                  // ```
+                ),
+                SizedBox(
+                  width: 80,
+                  height: 40,
+                  child: ColoredBox(
+                    color: Colors.amberAccent,
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  height: 200,
+                  child: ColoredBox(
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const Text(
+              '久野だよ〜',
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
