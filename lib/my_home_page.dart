@@ -13,13 +13,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  // リストを用意
+  final list = ['ドラえもん', 'おぱんちゅうさぎ', 'カレーの恩返し', 'ブラックサンダー'];
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +25,26 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // Center で真ん中寄せ
-      body: Center(
-        // Column は [] の中身を縦に並べてくれる widget
-        // Row で横になるよ
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      // ListView を作ってくれるビルダー
+      body: ListView.builder(
+        // 上で作った list の長さ分リストを作るよ！
+        itemCount: list.length,
+        // 今回は使わないので BuildContext は省略
+        // index に番目が入る
+        itemBuilder: (_, index) {
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              // list の index 番目のテキストを表示
+              child: Text(
+                list[index],
+                style: const TextStyle(
+                  fontSize: 24,
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      // 右下のプラスボタン（Floating Action Button と言います）
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          );
+        },
       ),
     );
   }
