@@ -17,7 +17,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String body = '';
+  // state を変更！
+  List<Repository> _repositories = [];
 
   // リポジトリ取得するメソッド
   // async キーワードは関数が非同期であることを示す
@@ -58,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // ボディを表示してみる
     setState(() {
-      body = response.body;
+      _repositories = repositories;
     });
   }
 
@@ -72,9 +73,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       // SingleChildScrollView を使ってスクロールできるようにしてる
-      body: SingleChildScrollView(
-        child: Text(body),
-      ),
+      body: _repositories.isEmpty
+          ? const SizedBox.shrink()
+          : ListView.builder(
+              itemCount: _repositories.length,
+              itemBuilder: ((context, index) {
+                return Text(_repositories[index].name);
+              }),
+            ),
       // 右下のプラスボタン（Floating Action Button と言います）
       floatingActionButton: FloatingActionButton(
         onPressed: getRepositoryList,
