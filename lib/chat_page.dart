@@ -4,6 +4,8 @@ import 'package:flutter_sample_2024/post_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.title});
 
@@ -17,8 +19,17 @@ class _ChatPageState extends State<ChatPage> {
   String _text = '';
   // ローディングの表示・非表示を切り替える bool の state を追加
   bool isLoading = false;
+  // SharedPreferences のインスタンスを作成
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  // SharedPreferences に保存するキーを定義
+  final key = 'messages';
 
   Future<void> postChat(String text) async {
+    final SharedPreferences prefs = await _prefs;
+    // 今までのメッセージを取得
+    // なかったら空のリストを返す
+    final List<String> messages = prefs.getStringList(key) ?? [];
+
     // ローディング開始！
     setState(() {
       isLoading = true;
@@ -38,12 +49,24 @@ class _ChatPageState extends State<ChatPage> {
       {'api-version': '2024-02-15-preview'},
     );
 
+    final Message myMessage = Message('user', text);
+    // 今までのメッセージに今回のメッセージを追加
+    // ...はスプレッド演算子といい，リストの要素を展開して新しいリストの中に直接挿入できる
+    //　例: [1, 2, 3, ...[4, 5]] => [1, 2, 3, 4, 5]
+    prefs.setStringList(
+      key,
+      [...messages, jsonEncode(myMessage.toJson())],
+    );
+    // デバッグ用
+    debugPrint(prefs.getStringList(key).toString());
+
     final response = await http.post(
       url,
       body: json.encode({
-        'messages': [
-          {'role': 'user', 'content': text}
-        ]
+        'messages': prefs
+            .getStringList(key)
+            ?.map((message) => json.decode(message))
+            .toList(),
       }),
       headers: {'Content-Type': 'application/json', 'api-key': apiKey},
     );
@@ -51,11 +74,22 @@ class _ChatPageState extends State<ChatPage> {
     // ステータスコード確認！
     debugPrint(response.statusCode.toString());
     // body をそのまま出力すると文字化けしてしまう
-    debugPrint(response.body);
+    // debugPrint(response.body);
     // 文字化けをなくすために utf8 に decode してから json.decode する！
     final bdoy = json.decode(utf8.decode(response.bodyBytes));
     // model に変換！
     final answer = Answer.fromJson(bdoy);
+
+    final Message aiMessage =
+        Message('assistant', answer.choices.first.message.content);
+    // 今までのメッセージに今回のメッセージを追加
+    prefs.setStringList(
+      key,
+      [
+        ...prefs.getStringList(key) ?? [],
+        jsonEncode(aiMessage.toJson()),
+      ],
+    );
 
     // ▲ response をみながら返信を state に渡す
     setState(() {
