@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_2024/model/answer.dart';
 import 'package:flutter_sample_2024/post_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -45,53 +46,13 @@ class _ChatPageState extends State<ChatPage> {
     // body をそのまま出力すると文字化けしてしまう
     debugPrint(response.body);
     // 文字化けをなくすために utf8 に decode してから json.decode する！
-    final answer = json.decode(utf8.decode(response.bodyBytes));
-
-    // === response example ===
-    // flutter: {
-    //   "id": "chatcmpl-9HVE55cvXZfls72I18t5NIwir6dqp",
-    //   "object": "chat.completion",
-    //   "created": 1713958637,
-    //   "model": "gpt-4",
-    //   "usage": {
-    //     "prompt_tokens": 11,
-    //     "completion_tokens": 19,
-    //     "total_tokens": 30
-    //   },
-    //   "choices": [
-    //     {
-    //       "message": {
-    //         "role": "assistant",
-    //         "content": "こんにちは、何かお手伝いできることはありますか？"
-    //       },
-    //       "finish_reason": "stop",
-    //       "index": 0,
-    //       "logprobs": null,
-    //       "content_filter_results": {
-    //         "hate": {"filtered": false, "severity": "safe"},
-    //         "self_harm": {"filtered": false, "severity": "safe"},
-    //         "sexual": {"filtered": false, "severity": "safe"},
-    //         "violence": {"filtered": false, "severity": "safe"}
-    //       }
-    //     }
-    //   ],
-    //   "prompt_filter_results": [
-    //     {
-    //       "prompt_index": 0,
-    //       "content_filter_results": {
-    //         "hate": {"filtered": false, "severity": "safe"},
-    //         "self_harm": {"filtered": false, "severity": "safe"},
-    //         "sexual": {"filtered": false, "severity": "safe"},
-    //         "violence": {"filtered": false, "severity": "safe"}
-    //       }
-    //     }
-    //   ],
-    //   "system_fingerprint": null
-    // }
+    final bdoy = json.decode(utf8.decode(response.bodyBytes));
+    // model に変換！
+    final answer = Answer.fromJson(bdoy);
 
     // ▲ response をみながら返信を state に渡す
     setState(() {
-      _text = answer['choices'][0]['message']['content'];
+      _text = answer.choices.first.message.content;
     });
   }
 
