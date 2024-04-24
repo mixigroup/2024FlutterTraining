@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sample_2024/model/repository.dart';
 import 'package:http/http.dart' as http;
 
 // こちらが　MyHomePage
@@ -46,7 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // json から dart で扱える（Map<String, dynamic> のリスト）に変換（decode）
     final List list = json.decode(response.body);
     // こういう取得方法になるので typo したりネストしたりが大変！🥺
-    debugPrint(list[0]['name']);
+    // debugPrint(list[0]['name']);
+
+    // リストに入ってる Map<String, dynamic> を map で１つ１つ取り出しさっき作った Repository モデルに変換
+    final List<Repository> repositories =
+        list.map((item) => Repository.fromJson(item)).toList();
+    // 'name' と指定したものが，直接アクセスして取得できるように！
+    // ドットを打つと候補が出てくるので便利〜！🎉
+    debugPrint(repositories[0].name);
 
     // ボディを表示してみる
     setState(() {
