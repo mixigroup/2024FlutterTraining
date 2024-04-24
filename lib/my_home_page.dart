@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 // こちらが　MyHomePage
 // StatefulWidget に関しても後で説明するよ！！！！！
@@ -13,14 +14,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Scaffold は土台みたいな感じ（白紙みたいな）
@@ -32,26 +25,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // Center で真ん中寄せ
       body: Center(
-        // Column は [] の中身を縦に並べてくれる widget
-        // Row で横になるよ
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: GridView.count(
+          // 横に並べる数
+          crossAxisCount: 3,
+          // 縦の間隔
+          mainAxisSpacing: 50,
+          // 横の感覚
+          crossAxisSpacing: 50,
+          children: List.generate(
+            // 並べる個数
+            9,
+            // 並べる要素
+            (index) {
+              return const ColoredBox(
+                color: Colors.deepPurple,
+              );
+            },
+          ),
         ),
-      ),
-      // 右下のプラスボタン（Floating Action Button と言います）
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
