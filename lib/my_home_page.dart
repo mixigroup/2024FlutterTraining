@@ -15,6 +15,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // state 準備！
   String text = '';
+  String tmpText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +37,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // 打った文字が value に入ってくる
               onChanged: (value) {
-                // state に入れて再描画！
-                setState(() {
-                  text = value;
-                });
+                tmpText = value;
               },
             ),
+          ),
+          IconButton(
+            onPressed: () {
+              // ボタンが押された時に state に反映
+              setState(() {
+                text = tmpText;
+              });
+            },
+            icon: const Icon(Icons.arrow_downward_rounded),
           ),
           // 打った文字を表示
           Text(text),
