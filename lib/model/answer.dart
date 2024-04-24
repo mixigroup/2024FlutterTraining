@@ -78,9 +78,14 @@ class Choice {
 @JsonSerializable(explicitToJson: true)
 class Message {
   Message(
+    this.role,
     this.content,
   );
 
+  // 文脈理解のために role が必要
+  // 自分の発言か相手の発言かを判断するため
+  // 自分なら user，相手なら assistant が入る
+  String role;
   String content;
 
   factory Message.fromJson(Map<String, dynamic> json) =>
